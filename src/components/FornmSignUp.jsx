@@ -3,7 +3,8 @@ import { TextField, Switch, FormGroup, FormControlLabel } from '@mui/material';
 import { useState } from 'react';
 
 
-const FormSignUp = () => {
+const FormSignUp = (props) => {
+    const { handleSubmit } = props;
 
     const [name, setName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -11,18 +12,45 @@ const FormSignUp = () => {
     const [promo, setPromo] = useState(true);
     const [news, setNews] = useState(true);
 
+    const [errors, setErrors] = useState({
+        name: {
+            error: false,
+            message: 'Must type at least 6 characters',
+        },
+    });
+
+    const nameValidation = (name) => {
+        if (name.length < 6) {
+            setErrors({
+                name: {
+                    error: true,
+                    message: 'Must type at least 6 characters',
+                }
+            })
+        } else {
+            setErrors({
+                name: {
+                    error: false,
+                    message: '',
+                }
+            })
+        }
+
+    };
 
     return (
-        <form onSubmit={(e) => {
-            e.preventDefault();
-            console.log({
-                name,
-                lastName,
-                email,
-                promo,
-                news,
-            });
-        }}>
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit({
+                    name,
+                    lastName,
+                    email,
+                    promo,
+                    news,
+                });
+            }}
+        >
             <TextField
                 id="name"
                 label="Name"
@@ -32,7 +60,21 @@ const FormSignUp = () => {
                 margin='normal'
                 onChange={(e) => setName(e.target.value)}
                 value={name}
+                error={errors.name.error}
+                helperText={
+                    errors.name.error
+                        ? errors.name.message
+                        : ""
+                }
+                onBlur={(e) => {
+                    setErrors(
+                        nameValidation(
+                            e.target.value
+                        )
+                    )
+                }}
             />
+
             <TextField
                 id="lastName"
                 label="Last Name"
