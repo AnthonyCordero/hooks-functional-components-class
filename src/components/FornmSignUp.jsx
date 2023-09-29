@@ -1,17 +1,28 @@
 import Button from '@mui/material/Button';
 import { TextField, Switch, FormGroup, FormControlLabel } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 
 const FormSignUp = () => {
 
     const [name, setName] = useState('');
-    useEffect(() => {
-        console.log('name change: ', name)
-    }, [name]);
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [promo, setPromo] = useState(true);
+    const [news, setNews] = useState(true);
+
 
     return (
-        <form action="">
+        <form onSubmit={(e) => {
+            e.preventDefault();
+            console.log({
+                name,
+                lastName,
+                email,
+                promo,
+                news,
+            });
+        }}>
             <TextField
                 id="name"
                 label="Name"
@@ -19,10 +30,7 @@ const FormSignUp = () => {
                 fullWidth
                 required
                 margin='normal'
-                onChange={(e) => {
-                    console.log(e.target.value)
-                    setName(e.target.value)
-                }}
+                onChange={(e) => setName(e.target.value)}
                 value={name}
             />
             <TextField
@@ -32,6 +40,8 @@ const FormSignUp = () => {
                 fullWidth
                 required
                 margin='normal'
+                onChange={(e) => setLastName(e.target.value)}
+                value={lastName}
             />
             <TextField
                 id="email"
@@ -40,19 +50,34 @@ const FormSignUp = () => {
                 fullWidth
                 required
                 margin='normal'
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+
             />
 
             <FormGroup>
-                <FormControlLabel control={
-                    <Switch defaultChecked />
-                } label="Receive Promos" name="Receive Promos" id="firstInput"
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={promo}
+                            onChange={(e) => setPromo(e.target.checked)}
+                        />}
+                    label="Receive Promos"
+                    name="Receive Promos"
+                    id="firstInput"
                 />
-                <FormControlLabel control={
-                    <Switch defaultChecked />
-                } label="News" name="News" id="secondInput"
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={news}
+                            onChange={(e) => setNews(e.target.checked)}
+                        />}
+                    label="News"
+                    name="News"
+                    id="secondInput"
                 />
             </FormGroup>
-            <Button variant="contained">Register</Button>
+            <Button type='submit' variant="contained">Register</Button>
         </form >
     )
 };
